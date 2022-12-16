@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Final Project</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>index</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14693,7 +14693,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">run_functions_eagerly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Necessary commands to run the model</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">run_functions_eagerly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">enable_debug_mode</span><span class="p">()</span>
 </pre></div>
 
@@ -14702,6 +14703,22 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="Data-Extraction-and-Cleansing">Data Extraction and Cleansing<a class="anchor-link" href="#Data-Extraction-and-Cleansing">&#182;</a></h2><p>Before we could get started with our actual model it was necessary to take in our dataset and make it into a format that could be accepted by our algorithm. Since we chose a niche topic, we were unable to find a pre-made dataset already on the internet. Thus to make this topic work, we had to create our own dataset. We first created this dataset in google sheets and then exported it our as a CSV. Our final dataset consisted of 7 columns: Name, Model, Region, Vision, Weapon, Revenue and Year Released. Below I will go into depth about the creation of the individual columns.</p>
+<h3 id="Name,-Revenue,-Year-Released">Name, Revenue, Year Released<a class="anchor-link" href="#Name,-Revenue,-Year-Released">&#182;</a></h3><p>We were able to find a '<a href="https://www.kaggle.com/datasets/saladyong/genshin-impact-banner-revenue">Kaggle Dataset</a>' that helped us identify the Name, Revenue and Year of Release. This dataset was a very helpful resource since it highlighted just the 5 star characters, which is the focus of our project. It also entailed the date that the banner started for us to extract out the year. There is something to note on the calculation of revenue though. When releasing characters, there is a chance that a new character is released in a rerun banner along with other characters. Thus the revenue that was present, was present for all characters on the rerun banner. This was definately an area that gave us a lot of trouble to figure out how to calculate the individual revenue for characters present in the banner. But we were able to figure out a clever technique as a workaround. Using '<a href="https://paimon.moe/wish/tally?id=300028">Wish Tally</a>' website, we were able to figure out the number of times that each character on a banner was &quot;summoned&quot;. Using this we simply added up the summons for all characters, and then divided our character in interest by that totaled number. Now we had a ratio for about how much of the money was brought in because of this character. Then to finish that up we multiplied that ratio by the revenue present on the Kaggle dataset. Important to note that we only considered the first run for characters, and didn't include any reruns they had.</p>
+<h3 id="Model">Model<a class="anchor-link" href="#Model">&#182;</a></h3><p>This dataset was created in very early stages of our project and thus we were still unsure about the format that the images would need to be present. Because CSV's do not allow images to be present, we were forced to separately import those in. But since our dataset was created at very early stages of the project, we as a backup still decided to include the images as their own websites. I used a website creater to manually feed in each image and thus get an individual website. Even though it is not needed for our project, it is still useful for individuals just viewing our dataset. All of the images, including the Genshin Character Folder, were manually searched and taken from '<a href="https://genshin-impact.fandom.com/wiki/Genshin_Impact_Wiki">Genshin Fandom</a>'.</p>
+<h3 id="Region,-Vision,-Weapon">Region, Vision, Weapon<a class="anchor-link" href="#Region,-Vision,-Weapon">&#182;</a></h3><p>When we started the project, we were still unsure about the exact features that would have an impact on the revenue. Thus we decided to include region, vision and weapon as well to do some comparions below to decide their impact on revenue. To help fetch these items we weren't really able to find a dataset that outlined this. Thus to get all these factors we had to manually retrieve all these facts from the game itself. It is to note that all team members verified this multiple times in the game to make sure they were accurate.</p>
+<p>After setting up all these columns we now are able to discuss each character more in depth.</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -14710,7 +14727,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./Genshin_Dataset.csv&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Reading in the data set</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./Genshin_Dataset.csv&#39;</span><span class="p">)</span>
 <span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
 </pre></div>
 
@@ -15011,6 +15029,19 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="Data-Cleansing">Data Cleansing<a class="anchor-link" href="#Data-Cleansing">&#182;</a></h2><p>The next few cells will focus on cleansing the data to be able to work with it later on.</p>
+<p>As stated above, the Model column ended up being useless. Thus to avoid confusion, we decided to drop the column.</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -15019,7 +15050,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="s1">&#39;Model&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Dropping unnecessary column</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="s1">&#39;Model&#39;</span><span class="p">)</span>
 
 <span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -15125,6 +15157,18 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Another necessary step was to change the name of of the characters. One character Childe technically had two names present, but for clarity we decided to stick with just one name. This keeps the naming standard consistent for all the characters.</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -15133,7 +15177,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Childe (Tartaglia)&#39;</span><span class="p">,</span> <span class="s1">&#39;Childe&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Changing extraneous value</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Childe (Tartaglia)&#39;</span><span class="p">,</span> <span class="s1">&#39;Childe&#39;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -15141,6 +15186,18 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>The last step as a part of the data cleansing step was to change the way the Revenue column was presented. Currently, the column was present in a String format, because it included a &quot;$&quot; in front of the revenue. The dollar sign added nothing necessary, so we decided to use a map to eliminate the dollar sign and convert the revenue to an integer. We then created a new column 'Revenue Value' and set it equal to this new array of integer values.</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -15149,7 +15206,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">revenues</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Revenue&#39;</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Converting the Revenues to integers</span>
+<span class="n">revenues</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Revenue&#39;</span><span class="p">]</span>
 <span class="n">revenues</span> <span class="o">=</span> <span class="n">revenues</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span> <span class="c1"># removes $ and commas from the revenue</span>
 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Revenue Value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">revenues</span>
 
@@ -15263,6 +15321,18 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="Summary-Statistics">Summary Statistics<a class="anchor-link" href="#Summary-Statistics">&#182;</a></h2><p>Now essentially our data is all ready to manipulate and feed into our model. As one step useful for the remainder of the analysis we thought it would be useful to create some simple summary statistics. This includes data that at a first glance would be important, including min, max, mean, median and standard deviation. For our discussion we decided to eliminate the mode, because no two characters had the same exact revenue. These numbers were printed out to help get a feel for the data before we jump into visualizations. These numbers will also be used below to help create visualizations and do analysis on them.</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -15271,7 +15341,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Summary Statistics</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Calculating and Displaying Summary Statistics</span>
 <span class="n">minimum</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Revenue Value&#39;</span><span class="p">])</span>
 <span class="n">maximum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Revenue Value&#39;</span><span class="p">])</span>
 <span class="n">mean</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Revenue Value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -16167,6 +16237,18 @@ class="
 </div>
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="Model-and-Transfer-Learning">Model and Transfer Learning<a class="anchor-link" href="#Model-and-Transfer-Learning">&#182;</a></h3><p>Now, we can start the preprocessing required to feed the data into the model. For this step, we go through all the images in the &quot;character images&quot; folder. We then extract the character name, and create our file path for each image correctly. Next, we read in the colored images, and resize all of them to standardize them to a certain size of (100,250). Lastly, we convert all the pixels to numerical data. <br> One of our main concerns was that our dataset was very small as there were a limited number of characters. We solved this problem by applying image augmentations. We applied a horizontal and vertical transform to each image, thereby tripling the size of our dataset. We could now add all of our images, and our revenue to our images_arr, and our revenue_arr.<br> In our last few steps of preprocessing, we convert our images and revenues to np.array of type float and int32 respectively. <br> Now we can split out data into training and testing sets!</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16352,7 +16434,8 @@ class="
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">revenue_arr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="n">revenue_arr</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># converting all the revenues to type np.int32 </span>
+<span class="n">revenue_arr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="n">revenue_arr</span><span class="p">))</span>
 </pre></div>
 
      </div>
@@ -16368,7 +16451,8 @@ class="
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">img_train</span><span class="p">,</span> <span class="n">img_test</span><span class="p">,</span> <span class="n">rev_train</span><span class="p">,</span> <span class="n">rev_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">images_arr</span><span class="p">,</span> <span class="n">revenue_arr</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># splitting our data into training and testing sets</span>
+<span class="n">img_train</span><span class="p">,</span> <span class="n">img_test</span><span class="p">,</span> <span class="n">rev_train</span><span class="p">,</span> <span class="n">rev_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">images_arr</span><span class="p">,</span> <span class="n">revenue_arr</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> 
                                                             <span class="n">shuffle</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 </pre></div>
 
@@ -16416,6 +16500,28 @@ class="
 
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="Transfer-Learning">Transfer Learning<a class="anchor-link" href="#Transfer-Learning">&#182;</a></h3><p>We chose to use transfer learning for several reasons:<br></p>
+<ol>
+<li>Our dataset has characters that our model has not seen before. Therefore, we take features learned on the imagenet dataset and leverage them for our problem. <br></li>
+<li>Our dataset has very little data to train a full scale model from scratch. <br><br> The main steps we need to follow for transfer learning is to:</li>
+</ol>
+<ul>
+<li>Take layers from a previously trained model</li>
+<li>Freeze them, so as to avoid destroying any of the information they contain during future training rounds.</li>
+<li>Add some new, trainable layers on top of the frozen layers. They will learn to turn the old features into predictions on a new dataset.</li>
+<li>Train the new layers on our dataset.<br><br>For our transfer learning section of the project, we first built a base model using keras.applications.Xception. We then load the pretrained weights from imagenet. We add a Dropout layer before the classification layer, for regularization. Further, we also add a global pooling layer. We also make sure to pass training=False when calling the base model, so that it runs in inference mode, so that batchnorm statistics don't get updated even after we unfreeze the base model for fine-tuning.<br>We then train the top layer of the model where we compile and fit our model. In our case, we got a high accuracy of 96% after running it on 20 epochs, therefore we did not need to finetune it anymore. We can see that transfer learning was extremely useful and perfect for our classification task as we could pull out the features as vectors from a base model and use them for training the model on our dataset.</li>
+</ul>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16487,10 +16593,6 @@ class="
 <span class="n">x</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">GlobalAveragePooling2D</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
 <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
-
-<span class="c1"># you cna use cross entropy as your loss</span>
-<span class="c1"># your final layer a single output neuron -&gt; that holds what ever the regression prediction is</span>
-<span class="c1"># for classification your final layer is n_classes of neurons -&gt; where accuracy is argmax(final_layer) is the class</span>
 </pre></div>
 
      </div>
